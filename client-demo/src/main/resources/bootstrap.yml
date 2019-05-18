@@ -1,0 +1,48 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: consul-client
+  profiles:
+    active: dev
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        register: false  #仅作为消费者,不用注册服务
+        # 表示注册时使用IP而不是hostname
+        prefer-ip-address: true
+        # 服务注册标识，格式为：应用名称+服务器IP+端口
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+        service-name: my-first-consul-service    #服务名称
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      probability: 1.0
+    zipkin:
+      base-url: http://localhost:9411/
+      enabled: true
+      sender:
+        type: RABBIT
+    rabbitmq:
+      addresses: localhost
+      port: 5672
+      username: admin
+      password: 12345
+      virtual-host: sleuth
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  ReadTimeout:  30000
+  ConnectTimeout:  15000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000

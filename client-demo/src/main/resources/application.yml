@@ -1,0 +1,6 @@
+# config/consul-service,dev/data    //consul数据配置中心优先级高于本地
+description: client
+student:
+  name: client_zhuyulyp
+  age: 19
+  sex: 女
